@@ -1,37 +1,54 @@
-import SpriteSheet from './SpriteSheet.js'
-import {loadImage, loadLevel} from './Loaders.js'
+import Compositor from './Compositor.js'
+import Entity from './Entity.js'
+import {loadLevel} from './Loaders.js'
+import {createMario} from './Entities.js'
+import {loadBackgroundSprite} from './Sprites.js'
+import {createBackgroundLayer, createSpriteLayer} from './Layers.js'
+import Timer from './Timer.js';
 
-function drawBackground(background, context, sprites) {
-    background.ranges.forEach(([x1, x2, y1, y2]) => {
-        for (let x = x1; x < x2; x++) {
-            for (let y = y1; y < y2; y++) {
-                sprites.drawTile(background.tile, context, x, y);
-            }        
-        }    
-    });
-}
-
-function loadBackgroundSprite(image) {
-    return loadImage('assets/img/tiles.png')
-    .then(image => { 
-        console.log('image loaded', image)
-        const sprites = new SpriteSheet(image, 16, 16);
-        sprites.define('ground', 0, 0);
-        sprites.define('sky', 3, 23);
-        return sprites;
-    });
-}
+import Keyboard from './KeyboardState.js';
 
 const canvas = document.querySelector('#screen');
 const context = canvas.getContext('2d');
 
+// Parallelizing asynchronous calls 
 Promise.all([
+    createMario(),
     loadBackgroundSprite(), 
     loadLevel('1-1'),
 ])
-.then(([sprites, level]) => {
-    console.log('level loaded', level);
-    level.backgrounds.forEach(background => {
-        drawBackground(background, context, sprites);
+.then(([mario, backgroundSprites, level]) => {
+    const comp = new Compositor();
+
+    const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundSprites)
+    comp.layers.push(backgroundLayer);
+    
+    const gravity = 2000;
+    mario.pos.set(64, 180);
+    // mario.vel.set(200, -600);
+
+    const SPACE = 32;
+    const input = new Keyboard();
+    input.addMapping(SPACE, keyState => {
+        if (keyState) {
+            mario.jump.start();
+        } else {
+            mario.jump.cancel();
+        }
     });
+    input.listenTo(window)
+
+    const spriteLayer = createSpriteLayer(mario);
+    comp.layers.push(spriteLayer);
+
+    const timer = new Timer(1/60)
+
+    // redraw compositor at each frame
+    timer.update = function update(deltaTime) {
+        mario.update(deltaTime);
+        comp.draw(context);
+        mario.vel.y += gravity * deltaTime;
+    }
+
+    timer.start();
 })
