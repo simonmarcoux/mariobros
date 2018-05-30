@@ -1,22 +1,12 @@
-//private function to Layers Module
-function drawBackground(background, context, sprites) {
-    background.ranges.forEach(([x1, x2, y1, y2]) => {
-        for (let x = x1; x < x2; x++) {
-            for (let y = y1; y < y2; y++) {
-                sprites.drawTile(background.tile, context, x, y);
-            }        
-        }    
-    });
-}
-
-// 
-export function createBackgroundLayer(backgrounds, sprites) {
+export function createBackgroundLayer(level, sprites) {
     const buffer = document.createElement('canvas');
     buffer.width = 256;
     buffer.height = 240;
 
-    backgrounds.forEach(background => {
-        drawBackground(background, buffer.getContext('2d'), sprites);
+    const context = buffer.getContext('2d');
+    
+    level.tiles.forEach((tile, x, y) => {
+        sprites.drawTile(tile.name, context, x, y);
     });
 
     return function drawBackgroundLayer(context) {
@@ -24,8 +14,38 @@ export function createBackgroundLayer(backgrounds, sprites) {
     }
 }
 
-export function createSpriteLayer(entity) {
+export function createSpriteLayer(entities) {
     return function drawSpriteLayer(context) {
-        entity.draw(context);
+        entities.forEach(entity => {
+            entity.draw(context);
+        });
+    }
+}
+
+export function createCollisionLayer(level) {
+    const resolvedtiles = [];
+
+    const tileResolver = level.tileCollider.tiles;
+    const tileSize = tileResolver.tileSize;
+
+    // save original function
+    const getByIndexOriginal = tileResolver.getByIndex;
+
+    // override function and do what we want instead
+    tileResolver.getByIndex = function getByIndexFake(x, y) {
+        resolvedtiles.push({x, y});
+        return getByIndexOriginal.call(tileResolver, x, y);
+    }
+
+    return function drawCollision(context) {
+        context.strokeStyle = 'blue';
+        resolvedtiles.forEach(({x, y}) => {
+            context.beginPath();
+            context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+            context.stroke();
+            console.log('would draw ', x, y);
+        });
+
+        resolvedtiles.length = 0;
     }
 }

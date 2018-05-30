@@ -1,9 +1,6 @@
-import Compositor from './Compositor.js'
-import Entity from './Entity.js'
 import {loadLevel} from './Loaders.js'
 import {createMario} from './Entities.js'
-import {loadBackgroundSprite} from './Sprites.js'
-import {createBackgroundLayer, createSpriteLayer} from './Layers.js'
+import {createCollisionLayer} from './Layers.js'
 import Timer from './Timer.js';
 
 import Keyboard from './KeyboardState.js';
@@ -14,18 +11,18 @@ const context = canvas.getContext('2d');
 // Parallelizing asynchronous calls 
 Promise.all([
     createMario(),
-    loadBackgroundSprite(), 
     loadLevel('1-1'),
 ])
-.then(([mario, backgroundSprites, level]) => {
-    const comp = new Compositor();
-
-    const backgroundLayer = createBackgroundLayer(level.backgrounds, backgroundSprites)
-    comp.layers.push(backgroundLayer);
+.then(([mario, level]) => {
     
     const gravity = 2000;
     mario.pos.set(64, 180);
-    // mario.vel.set(200, -600);
+
+    level.comp.layers.push(createCollisionLayer(level));
+
+    // createCollisionLayer(level);
+
+    level.entities.add(mario);
 
     const SPACE = 32;
     const input = new Keyboard();
@@ -36,17 +33,24 @@ Promise.all([
             mario.jump.cancel();
         }
     });
-    input.listenTo(window)
 
-    const spriteLayer = createSpriteLayer(mario);
-    comp.layers.push(spriteLayer);
+    input.listenTo(window);
+
+    ['mousedown', 'mousemove'].forEach(eventName => {
+        canvas.addEventListener(eventName, event => {
+            if (event.buttons === 1) {
+                mario.vel.set(0, 0);
+                mario.pos.set(event.offsetX, event.offsetY);
+            }
+        });
+    });
 
     const timer = new Timer(1/60)
 
-    // redraw compositor at each frame
+    // redraw  at each frame
     timer.update = function update(deltaTime) {
-        mario.update(deltaTime);
-        comp.draw(context);
+        level.update(deltaTime);
+        level.comp.draw(context);
         mario.vel.y += gravity * deltaTime;
     }
 
