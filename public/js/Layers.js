@@ -46,6 +46,8 @@ export function createCollisionLayer(level) {
             console.log('would draw ', x, y);
         });
 
+        // level.entities.forEach(entity, () =>{});
+
         resolvedtiles.length = 0;
     }
 }
