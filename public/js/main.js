@@ -20,8 +20,6 @@ Promise.all([
 
     level.comp.layers.push(createCollisionLayer(level));
 
-    // createCollisionLayer(level);
-
     level.entities.add(mario);
 
     const SPACE = 32;
@@ -32,6 +30,14 @@ Promise.all([
         } else {
             mario.jump.cancel();
         }
+    });
+
+    input.addMapping(39, keyState => {
+        mario.go.dir = keyState;
+    });
+
+    input.addMapping(37, keyState => {
+        mario.go.dir = -keyState;
     });
 
     input.listenTo(window);

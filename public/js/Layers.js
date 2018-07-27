@@ -41,12 +41,21 @@ export function createCollisionLayer(level) {
         context.strokeStyle = 'blue';
         resolvedtiles.forEach(({x, y}) => {
             context.beginPath();
-            context.rect(x * tileSize, y * tileSize, tileSize, tileSize);
+            context.rect(
+                x * tileSize, y * tileSize, 
+                tileSize, tileSize);
             context.stroke();
-            console.log('would draw ', x, y);
+            // console.log('would draw ', x, y);
         });
 
-        // level.entities.forEach(entity, () =>{});
+        context.strokeStyle = 'red';
+        level.entities.forEach(entity => { 
+            context.beginPath();
+            context.rect(
+                entity.pos.x, entity.pos.y, 
+                entity.size.x, entity.size.y);
+            context.stroke();
+        });
 
         resolvedtiles.length = 0;
     }
