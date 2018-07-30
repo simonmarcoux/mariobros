@@ -13,17 +13,26 @@ export function loadImage(url) {
 }
 
 export function createTiles(level, backgrounds) {
+    function applyRange(background, xStart, xLen, yStart, yLen) {
+        const xEnd = xStart + xLen;
+        const yEnd = yStart + yLen;
+        // extrapolate coordinates
+        for (let x = xStart; x < xEnd; x++) {
+            for (let y = yStart; y < yEnd; y++) {
+                level.tiles.set(x, y, {
+                    name: background.tile,
+                });
+            }        
+        } 
+    }
+
     backgrounds.forEach(background => {
         // loop over the backgrounds
-        background.ranges.forEach(([x1, x2, y1, y2]) => {
-            // extrapolate coordinates
-            for (let x = x1; x < x2; x++) {
-                for (let y = y1; y < y2; y++) {
-                    level.tiles.set(x, y, {
-                        name: background.tile,
-                    });
-                }        
-            }    
+        background.ranges.forEach(range => {
+            if (range.length === 4) {
+                const [xStart, xLen, yStart, yLen] = range;
+                applyRange(background, xStart, xLen, yStart, yLen);
+            } 
         });
     })
 }
