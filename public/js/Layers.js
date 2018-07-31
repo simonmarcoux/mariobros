@@ -24,6 +24,9 @@ export function createBackgroundLayer(level, sprites) {
             const col = tiles.grid[x];
             if (col) {
                 col.forEach((tile, y) => {
+                    if (tile.name === 'chance') {
+                        
+                    }
                     sprites.drawTile(tile.name, context, x - startIndex, y);
                 });
             }
