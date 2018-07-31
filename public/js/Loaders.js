@@ -52,7 +52,7 @@ function createTiles(level, backgrounds) {
     })
 }
 
-function loadSpriteSheet(name) {
+export function loadSpriteSheet(name) {
     return loadJSON(`js/sprites/${name}.json`)
     .then(sheetSpec => Promise.all([
         sheetSpec,
@@ -64,12 +64,20 @@ function loadSpriteSheet(name) {
             sheetSpec.tileW, 
             sheetSpec.tileH);
 
-        sheetSpec.tiles.forEach(tileSpec => {
-            sprites.defineTile(
-                tileSpec.name, 
-                tileSpec.index[0], 
-                tileSpec.index[1]);
-        });
+            if (sheetSpec.tiles) {
+                sheetSpec.tiles.forEach(tileSpec => {
+                    sprites.defineTile(
+                        tileSpec.name, 
+                        tileSpec.index[0], 
+                        tileSpec.index[1]);
+                });
+            }
+
+            if (sheetSpec.frames) {
+                sheetSpec.frames.forEach(frameSpec => { 
+                    sprites.define(frameSpec.name, ...frameSpec.rect);
+                });
+            }
         
         return sprites;
     });
