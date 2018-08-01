@@ -20,6 +20,7 @@ Promise.all([
     window.camera = camera;
     mario.pos.set(64, 180);
 
+    // debug layers
     level.comp.layers.push(
         createCollisionLayer(level), 
         createCameraLayer(camera));
@@ -36,6 +37,10 @@ Promise.all([
     // redraw  at each frame
     timer.update = function update(deltaTime) {
         level.update(deltaTime);
+
+        if (mario.pos.x > 100) {
+            camera.pos.x = mario.pos.x - 100;
+        }
         level.comp.draw(context, camera);
      }
 
