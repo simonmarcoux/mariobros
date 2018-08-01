@@ -1,21 +1,25 @@
 import Keyboard from './KeyboardState.js';
 
-export function setupKeyboard(entity) {
+export function setupKeyboard(player) {
     const input = new Keyboard();
     input.addMapping('Space', keyState => {
         if (keyState) {
-            entity.jump.start();
+            player.jump.start();
         } else {
-            entity.jump.cancel();
+            player.jump.cancel();
         }
     });
 
+    input.addMapping('KeyO', keyState => {
+        player.turbo(keyState);
+    });
+
     input.addMapping('KeyD', keyState => {
-        entity.go.dir += keyState ? 1 : -1;
+        player.go.dir += keyState ? 1 : -1;
     });
 
     input.addMapping('KeyA', keyState => {
-        entity.go.dir += keyState ? -1 : 1;
+        player.go.dir += keyState ? -1 : 1;
     });
 
     return input;
