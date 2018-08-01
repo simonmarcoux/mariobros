@@ -39,11 +39,14 @@
     "animations": [
         {
             "name": "chance",
-            "frameLen": 1,
+            "frameLen": 0.15,
             "frames": [
                 "chance-1",
+                "chance-1",
+                "chance-1",
                 "chance-2",
-                "chance-3"
+                "chance-3",
+                "chance-2"
             ]
         }
     ]

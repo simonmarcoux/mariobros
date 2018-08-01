@@ -5,11 +5,11 @@ export default class SpriteSheet {
         this.height = height;
 
         this.tiles = new Map();
-        this.animation = new Map();
+        this.animations = new Map();
     }
 
     defineAnim(name, animation) {
-        this.animation.set(name, animation);
+        this.animations.set(name, animation);
     }
 
     define(name, x, y, width, height) {

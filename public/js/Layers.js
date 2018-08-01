@@ -9,25 +9,25 @@ export function createBackgroundLayer(level, sprites) {
     const context = buffer.getContext('2d');
 
     let startIndex, endIndex;
-
     function redraw(drawFrom, drawTo) {
-        if (drawFrom === startIndex && endIndex === drawTo) {
-            return;
-        }
+        // if (drawFrom === startIndex && endIndex === drawTo) {
+        //     return;
+        // }
 
         startIndex = drawFrom;
         endIndex = drawTo;
 
-        console.log('redrawing');
+        // console.log('redrawing');
 
         for (let x = startIndex; x <= endIndex; x++) {
             const col = tiles.grid[x];
             if (col) {
                 col.forEach((tile, y) => {
-                    if (tile.name === 'chance') {
-                        
+                    if (sprites.animations.has(tile.name)) {
+                        sprites.drawAnim(tile.name, context, x - startIndex, y, level.totalTime);
+                    } else {
+                        sprites.drawTile(tile.name, context, x - startIndex, y);
                     }
-                    sprites.drawTile(tile.name, context, x - startIndex, y);
                 });
             }
         }
