@@ -3,7 +3,6 @@ export default class SpriteSheet {
         this.image = image;
         this.width = width;
         this.height = height;
-
         this.tiles = new Map();
         this.animations = new Map();
     }
@@ -25,15 +24,16 @@ export default class SpriteSheet {
                 context.translate(-width, 0);
             }
 
-            context.drawImage(this.image,
-                            x,
-                            y,
-                            width,
-                            height,
-                            0,
-                            0,
-                            width,
-                            height);
+            context.drawImage(
+                this.image,
+                x,
+                y,
+                width,
+                height,
+                0,
+                0,
+                width,
+                height);
 
             return buffer;
         });
@@ -47,7 +47,7 @@ export default class SpriteSheet {
 
     draw(name, context, x, y, flip = false) {
         const buffer = this.tiles.get(name)[flip ? 1 : 0];
-        context.drawImage(buffer, x, y)
+        context.drawImage(buffer, x, y);
     }
 
     drawAnim(name, context, x, y, distance) {
