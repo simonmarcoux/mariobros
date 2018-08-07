@@ -13,7 +13,7 @@ Followed Meth Meth Method YouTube tutorials
 - Scrolling √
 - Animation √
 - Mario Mechanics √
-- Background patterns & Layers 
+- Background patterns & Layers √
 - Synchronous Entity Spawning
 - Entity Interaction
 - Tech Debt & Presentation

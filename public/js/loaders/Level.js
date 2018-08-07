@@ -101,7 +101,7 @@ function expandTiles(tiles, patterns) {
                 const derivedY = y + offsetY;
 
                 if (tile.pattern) {
-                    console.log('pattern detected', patterns[tile.pattern]);
+                    // console.log('pattern detected', patterns[tile.pattern]);
                     const tiles = patterns[tile.pattern].tiles
                     walkTiles(tiles, derivedX, derivedY);
                 } else {
