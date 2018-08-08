@@ -1,6 +1,6 @@
 import Camera from './Camera.js';
 import Timer from './Timer.js';
-import {loadLevel} from './loaders/level.js'
+import {createLevelLoader} from './loaders/level.js'
 // import {loadMario} from './entities/Mario.js'
 // import {loadGoomba} from './entities/Goomba.js'
 // import {loadKoopa} from './entities/Koopa.js'
@@ -10,34 +10,26 @@ import {createCollisionLayer, createCameraLayer} from './Layers.js'
 import {setupKeyboard} from './Input.js'
 import {setupMouseControl} from './debug.js'
 
+async function main(canvas) {
+    const context = canvas.getContext('2d');
 
-const canvas = document.querySelector('#screen');
-const context = canvas.getContext('2d');
+    const entityFactory = await loadEntities();
+    const loadLevel = await createLevelLoader(entityFactory);
+    const level = await loadLevel('1-1');
 
-// Parallelizing asynchronous calls 
-Promise.all([
-    // loadMario(),
-    // loadGoomba(),
-    // loadKoopa(),
-    loadEntities(),
-    loadLevel('1-1'),
-])
-.then(([entity, level]) => {
-    console.log(entity);
     const camera = new Camera(0, 0);
     window.camera = camera;
 
-    const mario = entity.mario();
+    const mario = entityFactory.mario();
     mario.pos.set(64, 180);
 
+    // const goomba = entityFactory.goomba();
+    // goomba.pos.set(220, 180);
+    // level.entities.add(goomba);
 
-    const goomba = entity.goomba();
-    goomba.pos.set(220, 180);
-    level.entities.add(goomba);
-
-    const koopa = entity.koopa();
-    koopa.pos.set(280, 180);
-    level.entities.add(koopa);
+    // const koopa = entityFactory.koopa();
+    // koopa.pos.set(280, 180);
+    // level.entities.add(koopa);
 
     // adds more mario on jump (looks like particles)
     // test to create synchronous entities
@@ -88,4 +80,7 @@ Promise.all([
      }
 
     timer.start();
-})
+}
+
+const canvas = document.querySelector('#screen');
+main(canvas);
