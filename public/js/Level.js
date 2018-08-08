@@ -1,4 +1,5 @@
 import Compositor from "./Compositor.js";
+import EntityCollider from "./EntityCollider.js";
 import TileCollider from "./TileCollider.js";
 
 export default class Level {
@@ -10,6 +11,7 @@ export default class Level {
         this.entities = new Set();
         // this.tiles = new Matrix();
 
+        this.entityCollider = new EntityCollider(this.entities);
         this.tileCollider = null;
 
         
@@ -28,6 +30,8 @@ export default class Level {
             
             entity.pos.y += entity.vel.y * deltaTime;
             this.tileCollider.checkY(entity);
+
+            this.entityCollider.check(entity);
             
             entity.vel.y += this.gravity * deltaTime;
         });

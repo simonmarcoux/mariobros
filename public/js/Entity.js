@@ -13,10 +13,15 @@ export class Trait {
         this.NAME = name;
     }
 
+    collides(us, them) {
+        console.log('collided with', them);
+        
+    }
+
     obstruct() {}
 
     update() {
-        console.warn('unhandled update call in Trait');
+        // console.warn('unhandled update call in Trait');
     }
 }
 
@@ -35,6 +40,14 @@ export default class Entity {
     addTrait(trait) {
         this.traits.push(trait);
         this[trait.NAME] = trait;
+    }
+
+    collides(candidate) {
+        this.traits.forEach(trait => {
+            trait.collides(this, candidate);
+        });
+
+        console.log('touched', candidate);
     }
 
     obstruct(side) {
