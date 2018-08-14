@@ -5,7 +5,7 @@ export default class EntityCollider {
     }
 
     check(subject) {
-        console.log(entity);
+        console.log(subject);
         this.entities.forEach(candidate => {
             if (subject === candidate) {
                 return;
