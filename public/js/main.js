@@ -1,5 +1,7 @@
 import Camera from './Camera.js';
 import Timer from './Timer.js';
+import Entity from './Entity.js';
+import PlayerController from './traits/PlayerController.js';
 import {createLevelLoader} from './loaders/level.js'
 // import {loadMario} from './entities/Mario.js'
 // import {loadGoomba} from './entities/Goomba.js'
@@ -9,6 +11,16 @@ import {loadEntities} from './Entities.js'
 import {createCollisionLayer, createCameraLayer} from './Layers.js'
 import {setupKeyboard} from './Input.js'
 import {setupMouseControl} from './debug.js'
+
+function createPlayerEnv(playerEntity) {
+    const playerEnv = new Entity();
+    const playerControl = new PlayerController();
+    playerControl.checkpoint.set(64, 64);
+    playerControl.setPlayer(playerEntity);
+    playerEnv.addTrait(playerControl);
+
+    return playerEnv;
+}
 
 async function main(canvas) {
     const context = canvas.getContext('2d');
@@ -21,7 +33,8 @@ async function main(canvas) {
     window.camera = camera;
 
     const mario = entityFactory.mario();
-    mario.pos.set(64, 180);
+    // mario.pos.set(64, 180);
+    // level.entities.add(mario);
 
     // const goomba = entityFactory.goomba();
     // goomba.pos.set(220, 180);
@@ -60,7 +73,9 @@ async function main(canvas) {
         createCollisionLayer(level));
         // createCameraLayer(camera));
     
-    level.entities.add(mario);
+
+    const playerEnv = createPlayerEnv(mario);
+    level.entities.add(playerEnv);
 
     const input = setupKeyboard(mario);
     input.listenTo(window);
@@ -73,9 +88,9 @@ async function main(canvas) {
     timer.update = function update(deltaTime) {
         level.update(deltaTime);
 
-        if (mario.pos.x > 100) {
-            camera.pos.x = mario.pos.x - 100;
-        }
+        camera.pos.x = Math.max(0, mario.pos.x - 100);
+        // if (mario.pos.x > 100) {
+        // }
         level.comp.draw(context, camera);
      }
 

@@ -56,6 +56,9 @@ export default class Entity {
         });
     }
 
+    // possible to add a player controller entity with nothing to draw
+    draw() {}
+
     update(deltaTime, level) {
         this.traits.forEach(trait => {
             trait.update(this, deltaTime, level);

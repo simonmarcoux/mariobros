@@ -22,6 +22,7 @@ export default class Level {
     }
 
     update(deltaTime) {
+        // tile collisions loop
         this.entities.forEach(entity => {
             entity.update(deltaTime, this);
 
@@ -31,9 +32,12 @@ export default class Level {
             entity.pos.y += entity.vel.y * deltaTime;
             this.tileCollider.checkY(entity);
 
-            this.entityCollider.check(entity);
-            
             entity.vel.y += this.gravity * deltaTime;
+        });
+
+        // entity collisions loop
+        this.entities.forEach(entity => {
+            this.entityCollider.check(entity);
         });
 
         this.totalTime += deltaTime;

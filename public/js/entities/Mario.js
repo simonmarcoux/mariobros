@@ -2,6 +2,7 @@ import Entity, {Trait} from '../Entity.js';
 import Jump from '../traits/Jump.js';
 import Go from '../traits/Go.js';
 import Stomper from '../traits/Stomper.js';
+import Killable from '../traits/Killable.js';
 import {loadSpriteSheet} from '../Loaders.js';
 
 const SLOW_DRAG = 1/1200;
@@ -49,6 +50,9 @@ function createMarioFactory(sprite) {
         mario.addTrait(new Go());
         mario.addTrait(new Jump());
         mario.addTrait(new Stomper());
+        mario.addTrait(new Killable());
+
+        mario.killable.removeAfter = 0;
 
         mario.turbo = setTurboState;
         mario.draw = drawMario;
