@@ -10,12 +10,13 @@ const FAST_DRAG = 1/5000;
 
 export function loadMario() {
     return loadSpriteSheet('mario')
+    // return loadSpriteSheet('pikachu')
     .then(createMarioFactory);
 }
 
 
 function createMarioFactory(sprite) {
-    console.log(sprite);
+    // console.log(sprite);
     // create animation from tile names
     const runAnim = sprite.animations.get('run'); //createAnim(['run-1', 'run-2', 'run-3'], 7);
 
@@ -43,9 +44,13 @@ function createMarioFactory(sprite) {
     }
 
     return function createMario() {
-        console.log(sprite);
+        // console.log(sprite);
         const mario = new Entity();
         mario.size.set(14, 16);
+        // pikachu offset
+        // mario.offset.y = 7;
+        // mario.offset.x = 7;
+
 
         mario.addTrait(new Go());
         mario.addTrait(new Jump());

@@ -14,8 +14,7 @@ export class Trait {
     }
 
     collides(us, them) {
-        console.log('collided with', them);
-        
+        // console.log('collided with', them);
     }
 
     obstruct() {}
@@ -27,6 +26,8 @@ export class Trait {
 
 export default class Entity {
     constructor() {
+        this.canCollide = true;
+
         this.pos = new Vec2(0, 0);
         this.vel = new Vec2(0, 0);
         this.size = new Vec2(0, 0);
@@ -47,7 +48,7 @@ export default class Entity {
             trait.collides(this, candidate);
         });
 
-        console.log('touched', candidate);
+        // console.log('touched', candidate);
     }
 
     obstruct(side) {

@@ -1,0 +1,41 @@
+{
+    "imageURL": "/assets/img/characters.gif",
+
+    "frames": [
+        {
+            "name": "idle",
+            "rect": [1, 180, 23, 23]
+        },
+        {
+            "name": "run-1",
+            "rect": [27, 180, 23, 23]
+        },
+        {
+            "name": "run-2",
+            "rect": [53, 180, 23, 23]
+        },
+        {
+            "name": "run-3",
+            "rect": [79, 180, 23, 23]
+        },
+        {
+            "name": "break",
+            "rect": [79, 158, 23, 23]
+        },
+        {
+            "name": "jump",
+            "rect": [54, 180, 23, 23]
+        }
+    ],
+    "animations": [
+        {
+            "name": "run",
+            "frameLen": 6,
+            "frames": [
+                "run-1",
+                "run-2",
+                "run-3"
+            ]
+        }
+    ]
+}

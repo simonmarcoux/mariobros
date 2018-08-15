@@ -33,7 +33,7 @@ export default class KeyboardState {
         }
 
         this.keyStates.set(code, keyState);
-        console.log(this.keyStates);
+        // console.log(this.keyStates);
         this.keyMap.get(code)(keyState);
     }
 

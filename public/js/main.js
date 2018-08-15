@@ -3,9 +3,6 @@ import Timer from './Timer.js';
 import Entity from './Entity.js';
 import PlayerController from './traits/PlayerController.js';
 import {createLevelLoader} from './loaders/level.js'
-// import {loadMario} from './entities/Mario.js'
-// import {loadGoomba} from './entities/Goomba.js'
-// import {loadKoopa} from './entities/Koopa.js'
 import {loadEntities} from './Entities.js'
 
 import {createCollisionLayer, createCameraLayer} from './Layers.js'
@@ -32,7 +29,8 @@ async function main(canvas) {
     const camera = new Camera(0, 0);
     window.camera = camera;
 
-    const mario = entityFactory.mario();
+    const player = entityFactory.player();
+    // const mario = entityFactory.mario();
     // mario.pos.set(64, 180);
     // level.entities.add(mario);
 
@@ -74,23 +72,25 @@ async function main(canvas) {
         // createCameraLayer(camera));
     
 
-    const playerEnv = createPlayerEnv(mario);
+    const playerEnv = createPlayerEnv(player);
+    // const playerEnv = createPlayerEnv(mario);
     level.entities.add(playerEnv);
 
-    const input = setupKeyboard(mario);
+    const input = setupKeyboard(player);
+    // const input = setupKeyboard(mario);
     input.listenTo(window);
 
     // debugging code (click on canvas to place mario)
-    setupMouseControl(canvas, mario, camera);
+    setupMouseControl(canvas, player, camera);
+    // setupMouseControl(canvas, mario, camera);
 
     const timer = new Timer(1/60)
     // redraw  at each frame
     timer.update = function update(deltaTime) {
         level.update(deltaTime);
 
-        camera.pos.x = Math.max(0, mario.pos.x - 100);
-        // if (mario.pos.x > 100) {
-        // }
+        camera.pos.x = Math.max(0, player.pos.x - 100);
+        // camera.pos.x = Math.max(0, mario.pos.x - 100);
         level.comp.draw(context, camera);
      }
 
