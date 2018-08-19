@@ -29,8 +29,8 @@ async function main(canvas) {
     const camera = new Camera(0, 0);
     window.camera = camera;
 
-    const player = entityFactory.player();
-    // const mario = entityFactory.mario();
+    // const player = entityFactory.player();
+    const player = entityFactory.mario();
     // mario.pos.set(64, 180);
     // level.entities.add(mario);
 

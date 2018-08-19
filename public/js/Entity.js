@@ -11,6 +11,18 @@ export const Sides = {
 export class Trait {
     constructor(name) {
         this.NAME = name;
+        this.tasks = [];
+    }
+
+    finalize() {
+        this.tasks.forEach(task => task());
+        this.tasks.length = 0;
+    }
+
+    // task: callback
+    queue(task) {
+        this.tasks.push(task);
+
     }
 
     collides(us, them) {
@@ -26,8 +38,6 @@ export class Trait {
 
 export default class Entity {
     constructor() {
-        this.canCollide = true;
-
         this.pos = new Vec2(0, 0);
         this.vel = new Vec2(0, 0);
         this.size = new Vec2(0, 0);
@@ -51,14 +61,21 @@ export default class Entity {
         // console.log('touched', candidate);
     }
 
-    obstruct(side) {
+    // or ...args
+    obstruct(side, match) {
         this.traits.forEach(trait => {
-            trait.obstruct(this, side);
+            trait.obstruct(this, side, match);
         });
     }
 
     // possible to add a player controller entity with nothing to draw
     draw() {}
+
+    finalize() {
+        this.traits.forEach(trait => {
+            trait.finalize();
+        })
+    }
 
     update(deltaTime, level) {
         this.traits.forEach(trait => {

@@ -3,7 +3,9 @@ import Jump from '../traits/Jump.js';
 import Go from '../traits/Go.js';
 import Stomper from '../traits/Stomper.js';
 import Killable from '../traits/Killable.js';
+import Solid from '../traits/Solid.js';
 import {loadSpriteSheet} from '../Loaders.js';
+import Physics from '../traits/Physics.js';
 
 const SLOW_DRAG = 1/1200;
 const FAST_DRAG = 1/5000;
@@ -50,6 +52,8 @@ function createPlayerFactory(sprite) {
         player.offset.x = 7;
 
 
+        player.addTrait(new Physics());
+        player.addTrait(new Solid());
         player.addTrait(new Go());
         player.addTrait(new Jump());
         player.addTrait(new Stomper());

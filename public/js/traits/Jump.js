@@ -5,6 +5,7 @@ export default class Jump extends Trait {
         super('jump');
 
         this.ready = 0;
+        // this.isDoubleJumping;
 
         this.duration = 0.3;
         this.velocity = 200;
@@ -20,7 +21,10 @@ export default class Jump extends Trait {
         return this.ready < 0;
     }
 
-    
+    // doubleJump() {
+
+    // }
+
     start() {
         this.requestTime = this.gracePeriod;
     }
@@ -33,6 +37,11 @@ export default class Jump extends Trait {
     obstruct(entity, side) {
         if (side === Sides.BOTTOM) {
             this.ready = 1;
+        } else if ((side === Sides.RIGHT || side === Sides.LEFT) && this.falling) {
+            // beginning of wall jump implementation
+            this.ready = 1;
+            // this.doubleJump()
+            entity.vel.y = 30;
         } else if (side === Sides.TOP) {
             this.cancel();
         }

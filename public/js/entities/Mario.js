@@ -4,6 +4,8 @@ import Go from '../traits/Go.js';
 import Stomper from '../traits/Stomper.js';
 import Killable from '../traits/Killable.js';
 import {loadSpriteSheet} from '../Loaders.js';
+import Solid from '../traits/Solid.js';
+import Physics from '../traits/Physics.js';
 
 const SLOW_DRAG = 1/1200;
 const FAST_DRAG = 1/5000;
@@ -51,7 +53,8 @@ function createMarioFactory(sprite) {
         // mario.offset.y = 7;
         // mario.offset.x = 7;
 
-
+        mario.addTrait(new Physics());
+        mario.addTrait(new Solid());
         mario.addTrait(new Go());
         mario.addTrait(new Jump());
         mario.addTrait(new Stomper());
