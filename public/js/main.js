@@ -4,10 +4,13 @@ import Entity from './Entity.js';
 import PlayerController from './traits/PlayerController.js';
 import {createLevelLoader} from './loaders/level.js'
 import {loadEntities} from './Entities.js'
-
-import {createCollisionLayer, createCameraLayer} from './Layers.js'
+import { loadFont } from './loaders/Font.js';
+import {createDashboardLayer} from './layers/Dashboard'
+import {createCollisionLayer} from './layers/Collisions.js'
+import {createCameraLayer} from './layers/Camera.js'
 import {setupKeyboard} from './Input.js'
 import {setupMouseControl} from './debug.js'
+import { loadont } from './loaders/Font.js';
 
 function createPlayerEnv(playerEntity) {
     const playerEnv = new Entity();
@@ -22,7 +25,11 @@ function createPlayerEnv(playerEntity) {
 async function main(canvas) {
     const context = canvas.getContext('2d');
 
-    const entityFactory = await loadEntities();
+    const [entityFactory, font] = await Promise.all([
+        loadEntities(),
+        loadFont()
+    ]);
+
     const loadLevel = await createLevelLoader(entityFactory);
     const level = await loadLevel('1-1');
 
@@ -70,6 +77,7 @@ async function main(canvas) {
     level.comp.layers.push(
         createCollisionLayer(level));
         // createCameraLayer(camera));
+    level.comp.layers.push(createDashboardLayer);
     
 
     const playerEnv = createPlayerEnv(player);
@@ -92,6 +100,7 @@ async function main(canvas) {
         camera.pos.x = Math.max(0, player.pos.x - 100);
         // camera.pos.x = Math.max(0, mario.pos.x - 100);
         level.comp.draw(context, camera);
+
      }
 
     timer.start();
