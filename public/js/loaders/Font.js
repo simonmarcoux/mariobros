@@ -1,7 +1,6 @@
-import { loadImage } from "../Loaders";
-import SpriteSheet from "../SpriteSheet";
+import { loadImage } from "../Loaders.js";
+import SpriteSheet from "../SpriteSheet.js";
 
-const 
 export function loadFont() {
     return loadImage('./assets/img/font.png')
         .then(image => {
