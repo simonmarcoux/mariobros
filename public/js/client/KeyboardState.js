@@ -8,8 +8,6 @@ export default class KeyboardState {
 
         // holds the callback functions for a key code
         this.keyMap = new Map();
-
-
     }
 
     addMapping(code, callback) {
