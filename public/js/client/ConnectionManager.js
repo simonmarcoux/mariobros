@@ -8,7 +8,41 @@ export default class ConnectionManager {
 
         this.conn.addEventListener('open', () => {
             console.log('connection established');
-            this.conn.send('create-session');
+            this.initSession();
         });
+
+        this.conn.addEventListener('message', event => {
+            console.log('received message', event.data);
+            this.receive(event.data);
+        });
+    }
+
+    initSession() {
+        const sessionId = window.location.hash.split('#')[1];
+        if (sessionId) {
+            this.send({
+                type: 'join-session',
+                id: sessionId
+            });
+        } else {
+            this.conn.send({ 
+                type: 'create-session',
+            });
+        }
+    }
+
+    receive(msg) {
+        const data = JSON.parse(msg);
+        if (data.type === 'session-created') {
+            window.location.hash = data.id;
+        }
+    }
+
+    send(data) {
+        const msg = JSON.stringify(data);
+        
+        console.log('sending message', msg);
+        this.conn.send(msg);
+        
     }
 }
