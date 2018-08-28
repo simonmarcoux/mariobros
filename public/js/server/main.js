@@ -16,27 +16,62 @@ function createId(len = 6, chars ='abcdefghjkmnopqrstwxyz0123456789') {
     return id;
 }
 
+function createClient(conn, id = createId()) {
+    return new Client(conn, id);
+}
+
+function createSession(id = createId()) {
+    if (sessions.has(id)) {
+        throw new Error(`Session ${id} already exist`);
+    } 
+
+    const session = new Session(id);
+    sessions.set(id, session);
+    console.log('Creating session', session);
+
+    return session;
+    
+}
+
+function getSession(id) {
+    return sessions.get(id);
+}
+
+function broadcastSession(session) {
+    const clients = [...session.clients];
+    clients.forEach(client => {
+        client.send({
+            type: 'session-broadcast',
+            peers: {
+                you: client.id,
+                clients: clients.map(client => client.id), // iterate over the clients and return only the id
+            }
+        })
+    });
+}
+
 server.on('connection', conn => {
     console.log('connection established');
-    const client = new Client(conn);
+    const client = createClient(conn);
 
     conn.on('message', msg => {
-        console.log('message received !');
-        console.log(msg);
-        const data = JSON.parse(msg);
+        const data = JSON.parse(msg); 
+        console.log('message received !', data);
+        
+        // const data = JSON.parse(msg);
 
         if (data.type === 'create-session') {
-            const id = createId();
-            const session = new Session(id);
+            // const id = createId();
+            const session = createSession();
             session.join(client);
-            sessions.set(session.id, session);
             client.send({ 
                 type: 'session-created',
                 id: session.id
             });
         } else if (data.type === 'join-session') {
-            const session = sessions.get(data.id);
+            const session = getSession(data.id) || createSession(data.id);
             session.join(client);
+            broadcastSession(session);
         }
 
         console.log('sessions', sessions)
@@ -51,5 +86,7 @@ server.on('connection', conn => {
                 sessions.delete(session.id);
             }
         }
+
+        broadcastSession(session);
     })
 });

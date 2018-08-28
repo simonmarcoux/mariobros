@@ -1,6 +1,9 @@
 export default class ConnectionManager {
-    constructor() {
+    constructor(playerManager) {
         this.conn = null;
+        this.peers = new Map();
+
+        this.playerManager = playerManager;
     }
 
     connect(address) {
@@ -25,16 +28,19 @@ export default class ConnectionManager {
                 id: sessionId
             });
         } else {
-            this.conn.send({ 
+            this.send({ 
                 type: 'create-session',
             });
         }
     }
 
     receive(msg) {
+        // console.log('reveive', msg);
         const data = JSON.parse(msg);
         if (data.type === 'session-created') {
             window.location.hash = data.id;
+        } else if (data.type === 'session-broadcast') {
+            this.updateManager(data.peers);
         }
     }
 

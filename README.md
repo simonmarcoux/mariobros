@@ -1,7 +1,10 @@
 # mariobros
 Mario bros game in js
 `npm install`
+
+Use both for multiplayer
 `npm start`
+`node public/js/server/main.js`
 Followed Meth Meth Method YouTube tutorials
 
 ## Steps 
@@ -16,12 +19,12 @@ Followed Meth Meth Method YouTube tutorials
 - Background patterns & Layers √
 - Synchronous Entity Spawning √
 - Entity Interaction √
-- Tech Debt & Presentation
+- Tech Debt & Presentation √
 - Dashboard & Fonts
 
 ## TODOs:
-- Make game multiplayer using websockets, with up to 4 players (10h)
-- Update character/environments sprites (4h)
-- Implement wall jumps (2-5h)
+- Make game multiplayer using websockets, with up to 4 players (5h) // multiplayer works, need only to be online
+- Update character/environments sprites (4h) (a second character is implemented)
+- Implement wall jumps (2-5h) (wall jump are in test, but they look like wall climbing)
 - Update mechanics (2-3h)
 

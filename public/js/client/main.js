@@ -43,6 +43,7 @@ async function main(canvas) {
     const playerManager = new PlayerManager();
     const firstPlayer = playerManager.createPlayer(entityFactory, level, 'mario');
     const secondPlayer = playerManager.createPlayer(entityFactory, level, 'player');
+    const player3 = playerManager.createPlayer(entityFactory, level, 'mario');
     const playerInstances = playerManager.instances;
 
     // const player = entityFactory.player();
@@ -54,7 +55,6 @@ async function main(canvas) {
         createCollisionLayer(level));
         // createCameraLayer(camera));
     level.comp.layers.push(createDashboardLayer);
-    
 
     // const playerEnv = createPlayerEnv(player);
     // // const playerEnv = createPlayerEnv(mario);

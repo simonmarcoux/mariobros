@@ -1,6 +1,7 @@
 
 class Client {
-    constructor(conn) {
+    constructor(conn, id) {
+        this.id = id;
         this.conn = conn;
         this.session = null;
     }
@@ -12,7 +13,7 @@ class Client {
         console.log(`sending message ${msg}`);
         this.conn.send(msg, function ack(err) {
             if (err) {
-                console.error('message failed');
+                console.error('Error sending message', msg, err);
             }
         });
     }
