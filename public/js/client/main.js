@@ -10,7 +10,8 @@ import {createCollisionLayer} from './layers/Collisions.js'
 import {createCameraLayer} from './layers/Camera.js'
 import {setupKeyboard} from './Input.js'
 import {setupMouseControl} from './debug.js'
-import PlayerManager from './client/PlayerManager.js';
+import PlayerManager from './PlayerManager.js';
+import ConnectionManager from './ConnectionManager.js';
 
 // function createPlayerEnv(playerEntity) {
 //     const playerEnv = new Entity();

@@ -1,6 +1,6 @@
-import PlayerController from '../traits/PlayerController.js';
-import { setupKeyboard } from '../Input.js';
-import Entity from '../Entity.js';
+import PlayerController from './traits/PlayerController.js';
+import { setupKeyboard } from './Input.js';
+import Entity from './Entity.js';
 
 function createPlayerEnv(playerEntity) {
     const playerEnv = new Entity();
