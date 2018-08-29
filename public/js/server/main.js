@@ -27,7 +27,7 @@ function createSession(id = createId()) {
 
     const session = new Session(id);
     sessions.set(id, session);
-    console.log('Creating session', session);
+    // console.log('Creating session', session);
 
     return session;
     
@@ -56,7 +56,7 @@ server.on('connection', conn => {
 
     conn.on('message', msg => {
         const data = JSON.parse(msg); 
-        console.log('message received !', data);
+        // console.log('message received !', data);
         
         // const data = JSON.parse(msg);
 
@@ -71,10 +71,13 @@ server.on('connection', conn => {
         } else if (data.type === 'join-session') {
             const session = getSession(data.id) || createSession(data.id);
             session.join(client);
+            
             broadcastSession(session);
+        } else if (data.type === 'state-update') {
+            client.broadcast(data);
         }
 
-        console.log('sessions', sessions)
+        // console.log('sessions', sessions)
     });
 
     conn.on('close', () => {

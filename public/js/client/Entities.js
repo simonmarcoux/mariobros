@@ -12,6 +12,7 @@ export function loadEntities() {
 
     return Promise.all([
         loadPlayer().then(addAs('player')),
+        loadPlayer().then(addAs('player')),
         loadMario().then(addAs('mario')),
         loadGoomba().then(addAs('goomba')),
         loadKoopa().then(addAs('koopa')),

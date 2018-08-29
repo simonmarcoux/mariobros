@@ -1,4 +1,5 @@
 import {Trait} from '../Entity.js';
+import Events from '../Events.js';
 
 export default class Go extends Trait {
     constructor() {
@@ -11,6 +12,8 @@ export default class Go extends Trait {
 
         this.distance = 0;
         this.heading = 1;
+
+        this.events = new Events();
     }
 
     update(entity, deltaTime) {
@@ -36,5 +39,6 @@ export default class Go extends Trait {
         entity.vel.x -= drag;
 
         this.distance += absX * deltaTime;
+        this.events.emit('go', this.dir, entity.vel.x);
     }
 }

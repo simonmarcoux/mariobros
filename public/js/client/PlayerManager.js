@@ -16,9 +16,12 @@ function createPlayerEnv(playerEntity) {
 export default class PlayerManager {
     constructor() {
         this.instances = new Set;
+
+        this.names = ['mario', 'player'];
+
     }
 
-    createPlayer(entityFactory, level, name) {
+    createPlayer(entityFactory, level, name, id = 0) {
         let player;
         
         if (name === 'mario') {
@@ -34,15 +37,18 @@ export default class PlayerManager {
         // const playerEnv = createPlayerEnv(mario);
         level.entities.add(playerEnv);
 
-        const input = setupKeyboard(player);
+        const input = setupKeyboard(player, id);
         input.listenTo(window);
-
 
         return player;
     }
 
     removePlayer(player) {
         this.instances.delete(player);
+        
+        console.log('remove player');
         // remove from canvas
+        player.killable.kill();
+        level.entities.delete(player);
     }
 }

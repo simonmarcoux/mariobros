@@ -1,9 +1,15 @@
 export default class ConnectionManager {
-    constructor(playerManager) {
+    constructor(playerManager, entityFactory, level) {
         this.conn = null;
         this.peers = new Map();
 
+        this.entityFactory = entityFactory;
+        this.level = level;
+
         this.playerManager = playerManager;
+        this.localPlayer = [...playerManager.instances][0]
+
+        this.names = ['mario', 'player'];
     }
 
     connect(address) {
@@ -12,6 +18,7 @@ export default class ConnectionManager {
         this.conn.addEventListener('open', () => {
             console.log('connection established');
             this.initSession();
+            this.watchEvents();
         });
 
         this.conn.addEventListener('message', event => {
@@ -34,6 +41,53 @@ export default class ConnectionManager {
         }
     }
 
+    watchEvents() {
+        const entity = this.localPlayer;
+        console.log(entity);
+
+        ['go', 'jump', 'die'].forEach(prop => {
+            entity.events.listen(prop, () => {
+                this.send({
+                    type: 'state-update',
+                    fragment: 'player',
+                    state: [prop, value]
+                })
+            })
+        });
+    }
+
+    updateManager(peers) {
+        const me = peers.you;
+        const clients = peers.clients.filter(id => me !== id);
+        clients.forEach(id => {
+            if (!this.peers.has(id)) {
+                const player = this.playerManager.createPlayer(this.entityFactory, this.level, 'mario');
+                this.peers.set(id, player);
+            }           
+        });
+        console.log(this.peers);
+        [...this.peers.entries()].forEach(([id, player]) => {
+            if (clients.indexOf(id) === -1) {
+                this.playerManager.removePlayer(player);
+                this.peers.delete(id);
+            }
+        })
+    }
+
+    updatePeer(id, fragment, [prop, value]) {
+        if (!this.peers.has(id)) {
+            console.error('client does not exist', id);
+            return;
+        }
+
+        const player = this.peers.get(id);
+        player[fragment][prop] = value;
+
+        // if (prop === 'score') {
+        //     console.log('score');
+        // }
+    }
+
     receive(msg) {
         // console.log('reveive', msg);
         const data = JSON.parse(msg);
@@ -41,6 +95,8 @@ export default class ConnectionManager {
             window.location.hash = data.id;
         } else if (data.type === 'session-broadcast') {
             this.updateManager(data.peers);
+        } else if (data.type === 'state-update') {
+            this.updatePeer(data.clientId, data.fragment, data.state);
         }
     }
 

@@ -6,6 +6,19 @@ class Client {
         this.session = null;
     }
 
+    broadcast(data) {
+        if (!this.session) {
+            throw new Error('can not broadcast without session');
+        }
+
+        data.clientID = this.id;
+        this.session.clients.forEach(client => {
+            if (this === client) {
+                return;
+            }
+            client.send(data);
+        });
+    }
 
     send(data) {
         const msg = JSON.stringify(data);

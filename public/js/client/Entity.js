@@ -1,5 +1,6 @@
 import {Vec2} from './Math.js';
 import BoundingBox from './BoundingBox.js';
+import Events from './Events.js';
 
 export const Sides = {
     TOP: Symbol('top'),
@@ -12,6 +13,8 @@ export class Trait {
     constructor(name) {
         this.NAME = name;
         this.tasks = [];
+
+        
     }
 
     finalize() {
@@ -44,6 +47,8 @@ export default class Entity {
         this.offset = new Vec2(0, 0);
         this.bounds = new BoundingBox(this.pos, this.size, this.offset);
         this.lifetime = 0;
+
+        this.events = new Events();
 
         this.traits = [];
     }

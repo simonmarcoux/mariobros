@@ -23,8 +23,6 @@ import ConnectionManager from './ConnectionManager.js';
 //     return playerEnv;
 // }
 
-const connectionManager = new ConnectionManager();
-connectionManager.connect('ws://localhost:9000');
 
 async function main(canvas) {
     const context = canvas.getContext('2d');
@@ -42,13 +40,14 @@ async function main(canvas) {
 
     const playerManager = new PlayerManager();
     const firstPlayer = playerManager.createPlayer(entityFactory, level, 'mario');
-    const secondPlayer = playerManager.createPlayer(entityFactory, level, 'player');
-    const player3 = playerManager.createPlayer(entityFactory, level, 'mario');
+
+    
+    const connectionManager = new ConnectionManager(playerManager, entityFactory, level);
+    connectionManager.connect('ws://localhost:9000');
+
+    // const secondPlayer = playerManager.createPlayer(entityFactory, level, 'player');
     const playerInstances = playerManager.instances;
 
-    // const player = entityFactory.player();
-    // const player = entityFactory.mario();
-    // const player2 = entityFactory.player();
 
     // debug layers
     level.comp.layers.push(
@@ -56,22 +55,8 @@ async function main(canvas) {
         // createCameraLayer(camera));
     level.comp.layers.push(createDashboardLayer);
 
-    // const playerEnv = createPlayerEnv(player);
-    // // const playerEnv = createPlayerEnv(mario);
-    // level.entities.add(playerEnv);
-    
-    // const playerEnv2 = createPlayerEnv(player2);
-    // level.entities.add(playerEnv2);
-
-    // const input = setupKeyboard(player);
-    // const input2 = setupKeyboard(player2);
-    // const input = setupKeyboard(mario);
-    // input.listenTo(window);
-    // input2.listenTo(window);
-
     // debugging code (click on canvas to place mario)
-    // setupMouseControl(canvas, player, camera);
-    // setupMouseControl(canvas, mario, camera);d
+    // setupMouseControl(canvas, mario, camera);
 
     const timer = new Timer(1/60)
     // redraw  at each frame
@@ -80,7 +65,6 @@ async function main(canvas) {
 
         camera.pos.x = Math.max(0, firstPlayer.pos.x - 100);
         level.comp.draw(context, camera);
-
      }
 
     timer.start();

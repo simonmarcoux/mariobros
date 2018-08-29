@@ -1,4 +1,5 @@
 import {Trait, Sides} from '../Entity.js';
+import Events from '../Events.js';
 
 export default class Killable extends Trait {
     constructor() {
@@ -7,6 +8,8 @@ export default class Killable extends Trait {
         this.dead = false;
         this.deadTime = 0;
         this.removeAfter = 2;
+
+        this.events = new Events();
     }
 
     // public kill method
@@ -25,6 +28,7 @@ export default class Killable extends Trait {
             if (this.deadTime > this.removeAfter) {
                 this.queue(() => {
                     level.entities.delete(entity);
+                    this.events.emit('kill', entity);
                 });
             }
         }

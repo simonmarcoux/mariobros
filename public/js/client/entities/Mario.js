@@ -60,6 +60,19 @@ function createMarioFactory(sprite) {
         mario.addTrait(new Stomper());
         mario.addTrait(new Killable());
 
+        
+        // console.log('test', mario.go.events.listen);
+        // mario.go.events.listen('go', (dir) => {
+        //     // player.go.update();
+        //     console.log('is a goooo')
+        // })
+
+        mario.killable.events.listen('kill', (dir) => {
+            // player.go.update();
+            console.log('is a kill')
+        })
+
+
         mario.killable.removeAfter = 0;
 
         mario.turbo = setTurboState;
