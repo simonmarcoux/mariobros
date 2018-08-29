@@ -39,7 +39,7 @@ async function main(canvas) {
     window.camera = camera;
 
     const playerManager = new PlayerManager();
-    const firstPlayer = playerManager.createPlayer(entityFactory, level, 'mario');
+    const firstPlayer = playerManager.createPlayer(entityFactory, level, 'mario', true);
 
     
     const connectionManager = new ConnectionManager(playerManager, entityFactory, level);

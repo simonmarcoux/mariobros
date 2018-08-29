@@ -21,7 +21,7 @@ export default class PlayerManager {
 
     }
 
-    createPlayer(entityFactory, level, name, id = 0) {
+    createPlayer(entityFactory, level, name, local = false) {
         let player;
         
         if (name === 'mario') {
@@ -37,8 +37,11 @@ export default class PlayerManager {
         // const playerEnv = createPlayerEnv(mario);
         level.entities.add(playerEnv);
 
-        const input = setupKeyboard(player, id);
-        input.listenTo(window);
+
+        if (local) {
+            const input = setupKeyboard(player);
+            input.listenTo(window);
+        }
 
         return player;
     }
