@@ -45,12 +45,15 @@ export default class ConnectionManager {
         const entity = this.localPlayer;
         console.log(entity);
 
-        ['go', 'jump', 'die'].forEach(prop => {
+        
+        ['go', 'kill'].forEach(prop => {
+            console.log(entity.events, prop);
             entity.events.listen(prop, () => {
+                console.log('test')
                 this.send({
                     type: 'state-update',
                     fragment: 'player',
-                    state: [prop, value]
+                    state: [prop, entity[prop]]
                 })
             })
         });
@@ -66,9 +69,10 @@ export default class ConnectionManager {
             }           
         });
         console.log(this.peers);
+
         [...this.peers.entries()].forEach(([id, player]) => {
             if (clients.indexOf(id) === -1) {
-                this.playerManager.removePlayer(player);
+                this.playerManager.removePlayer(player, this.level);
                 this.peers.delete(id);
             }
         })
@@ -82,7 +86,15 @@ export default class ConnectionManager {
 
         const player = this.peers.get(id);
         player[fragment][prop] = value;
+        // if (prop === 'go') {
+        //     console.log(' is a gooooo');
+        // }
 
+        if (prop === 'kill') {
+            console.log('kill this player');
+            this.playerManager.removePlayer(player, this.level);
+            this.peers.delete(id);
+        }
         // if (prop === 'score') {
         //     console.log('score');
         // }

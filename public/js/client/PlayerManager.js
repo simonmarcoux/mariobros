@@ -46,7 +46,7 @@ export default class PlayerManager {
         return player;
     }
 
-    removePlayer(player) {
+    removePlayer(player, level) {
         this.instances.delete(player);
         
         console.log('remove player');

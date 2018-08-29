@@ -66,11 +66,16 @@ function createMarioFactory(sprite) {
         //     // player.go.update();
         //     console.log('is a goooo')
         // })
-
-        mario.killable.events.listen('kill', (dir) => {
+        
+        mario.killable.events.listen('kill', (entity) => {
             // player.go.update();
             console.log('is a kill')
+            mario.events.emit('kill', entity)
         })
+
+        mario.events.listen('kill', (entity) => {
+            console.log('test');
+        });
 
 
         mario.killable.removeAfter = 0;
